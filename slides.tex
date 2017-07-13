@@ -1,0 +1,284 @@
+\documentclass[pdf]{beamer}
+\mode<presentation>{\usetheme{Frankfurt}\usecolortheme{seahorse}}
+\title{Programming Languages for Data Analysis}
+\date{July 14, 2017}
+\author{Douglas Bates\\Dept. of Statistics\\U. of Wisconsin-Madison}
+\begin{document}
+  \begin{frame}
+    \maketitle
+  \end{frame}
+
+  \section{Preliminary Julia info}
+
+  \begin{frame}\frametitle{For the impatient}
+    \begin{itemize}
+      \pause
+      \item Much of this talk will be about the
+      \href{https://julialang.org}{Julia} programming language
+      \pause
+      \item For an overview of \href{https:julialang.org}{Julia} for econometrics,
+      see \href{https://quantecon.org}{quantecon.org}
+      \pause
+      \item The \href{https://lectures.quantecon.org/}{lectures} tab provides a
+      \href{https://python.org}{Python} version and a
+      \href{https://julialang.org}{Julia} version
+      \pause
+      \item The \href{https://lectures.quantecon.org/about_lectures.html}{About}
+      tab is a very good discussion of why these two languages were
+      chosen.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{More Julia resources}
+    \begin{itemize}
+      \pause
+      \item The original developers formed a company,
+      \href{https://juliacomputing.com}{Julia Computing}, to provide
+      consulting services and oversee the development of the language.
+      \pause
+      \item The \href{https://juliacomputing.com/case-studies/}{case studies}
+      section is of particular interest
+      \pause
+      \item Registered Julia packages are at
+      \href{https://pkg.julialang.org}{pkg.julialang.org}
+      \pause
+      \item Note that Julia packages are
+      \href{https://en.wikipedia.org/wiki/Git}{git} repositories, usually
+      housed on \href{http://github.com}{github.com}
+      \pause
+      \item See also
+      \href{https://pkg.julialang.org/pulse.html}{Julia Package Ecosystem Pulse}
+      \pause
+      \item Documentation for the language itself is at
+      \href{https://docs.julialang.org}{docs.julialang.org}
+    \end{itemize}
+  \end{frame}
+
+  \section{Background on S and R}
+  \begin{frame}\frametitle{Language shapes the way we think - Benjamin Lee Whorf}
+    \begin{itemize}
+      \pause
+      \item I have been doing data analysis programming for a long time
+      \begin{itemize}
+        \pause
+        \item took my only computing course in 1967 - didn't like it
+        \pause
+        \item in the 70's wrote Fortran code that I hope no one ever discovers
+        \pause
+        \item late 70's read Kernighan and his co-authors, saw programming
+        differently
+        \pause
+        \item was able to use sophisticated languages, almost by accident, in
+        thesis research
+        \pause
+        \item some SPSS and SAS use, Minitab for teaching
+        \pause
+        \item heard about the work on S by John Chambers and co. at Bell Labs
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{What was different about S?}
+    \begin{itemize}
+      \pause
+      \item
+      an interactive language (REPL - read-eval-print-loop)
+      \pause
+      \item functional language (in the sense of defining and calling functions)
+      \pause
+      \item
+      heterogeneous, self-describing, recursive, extensible data structures
+      \begin{itemize}
+        \pause
+        \item
+        contrast with flat-files structures in SPSS, SAS; vectors (columns)
+        in Minitab
+      \end{itemize}
+      \pause
+      \item
+      random-access memory based, not a filter
+      \begin{itemize}
+        \pause
+        \item required a ``second megabyte of memory''
+      \end{itemize}
+      \pause
+      \item explicit interfaces to compiled code
+        \begin{itemize}
+        \pause
+        \item
+          original versions were more of a wrapper around numerical and
+          graphics code bases
+        \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{What was the same with S?}
+    \begin{itemize}
+      \pause
+      \item explicitly designed for data analysis and graphics
+      \pause
+      \item provision for missing data was built in at a very low level
+      \pause
+      \item
+      internally, data structures were always vectors, possibly with ``attributes''
+      \pause
+      \item ``lists'' are actually vectors of pointers, not linked lists as in
+      Lisp
+      \pause
+      \item ``semi-proprietary'' software
+      \begin{itemize}
+        \pause
+        \item AT\&T couldn't market S (or the Unix operating system)
+        \item some universities became ``beta-test sites''
+        \item U. of Washington Stats. Dept. spun off ``StatSci'' and marketed S-PLUS
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{The 90's and the birth of R}
+        \begin{itemize}
+    \pause
+    \item
+      Open-Source software gained traction (perl, python, emacs, GNU/Linux, MySQL,
+      PostgreSQL) in some areas
+      \begin{itemize}
+      \pause
+      \item Servers were often characterized as LAMP (Linux, Apache, MySQL,
+        Perl/Python)
+      \item First releases of both Python and Linux were in 1991
+      \end{itemize}
+    \pause
+    \item
+      mid-90's Ross Ihaka and Robert Gentleman started work on a language
+      ``not-unlike S''
+      \begin{itemize}
+        \pause
+        \item S-PLUS had been ported to DOS/Windows but not to Macintosh
+        \item essentially a ``clean room'' reimplementation of the S language
+        \item Martin M\"{a}chler contributed so many patches they gave him an account
+        \item Martin encouraged release under the GPL
+        \item others joined the party, 1997 R-Core was formed.
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{The 90's and CRAN}
+    \begin{itemize}
+      \pause
+      \item Kurt Hornik and Fritz Leisch, then at TU-Wien, created the
+      ``Comprehensive R Archive Network'' (\textbf{CRAN})
+      \begin{itemize}
+        \pause
+        \item patterned after CTAN (TeX) and CPAN (Perl) archive networks
+      \end{itemize}
+      \pause
+      \item
+      Encouraged users to become developers and researchers to provide a
+      reference implementation of their methods
+      \pause
+      \item Promoted the development of package standards, testing etc.
+      \pause
+      \item One important facility added later (Uwe Ligges) was ``Win-builder'' to
+      create binary Windows packages
+      \begin{itemize}
+        \pause
+        \item most developers were on Linux, most users on Windows
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{The aughts - R fourishes}
+    \begin{itemize}
+      \pause
+      \item
+      Initially R was considered by many to be a ``poor man's S-PLUS''
+      \pause
+      \begin{itemize}
+        \item that is ``Freeware'' couldn't possibly be as good as commercial software
+      \end{itemize}
+      \pause
+      \item
+      Eventually the open-source model was recognized as producing high-quality code
+      \begin{itemize}
+        \pause
+        \item Eric S. Raymond, ``Given enough eyeballs, all bugs are shallow.''
+      \end{itemize}
+      \pause
+      \item
+      R-1.0.0 was released on February 29, 2000 - the day that didn't exist
+      \pause
+      \item
+      CRAN went from 10's to 100's to 1000's of packages
+      \pause
+      \item
+      useR! conferences started, \emph{R Newsletter} later to become \emph{R
+      Journal} founded
+      \pause
+      \item papers, books, online resources, became available
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{The aughts - other Open-Source languages enter the mix}
+    \begin{itemize}
+      \pause
+      \item S and R were designed for data analysis and graphics, not general purpose programming
+      \begin{itemize}
+        \pause
+        \item
+        as Ross said, ``we thought maybe a couple of hundred people total  would use it''
+      \end{itemize}
+      \pause
+      \item every language is a trade-off between pre-defined, high-level operations and low-level building blocks
+      \begin{itemize}
+        \pause
+        \item
+        R is oriented to high-level tools: vectors, matrices, data frames are okay; scalars, loops, low-level logic not so much
+        \item
+        the number of internal data types is surprisingly small (32-bit integers, 64-bit floats and character strings)
+      \end{itemize}
+      \pause
+      \item
+      languages like Python provided more flexibility but without the data
+      science specific structures
+      \begin{itemize}
+        \pause
+        \item required add-ons like numpy, pandas, etc.
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+\section{Hitting the wall with R}
+
+  \begin{frame}\frametitle{My adventures fitting mixed-effects models - nlme}
+    \begin{itemize}
+      \pause
+      \item In the mid-90's I was dragged into research on models with fixed- and random-effects, called \textit{mixed-effects models} in Statistics
+      \pause
+      \item Jos\'e Pinheiro and I wrote a package for S called \textit{nlme} to fit linear and nonlinear mixed-effects models
+      \begin{itemize}
+        \pause
+        \item One of the first packages ported to R.
+        \item Also a Springer book published in 2000.
+        \item About 14,000 lines of R code and 3,000 lines of C code
+        \item Used S3 classes and methods.
+        \item Compiled code called through \texttt{.C} and \texttt{.Call}
+      \end{itemize}
+      \pause
+      \item As soon as it was released I started thinking there were better ways to do this
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{My adventures fitting mixed-effects models - lme4}
+    \begin{itemize}
+      \pause
+      \item In the aughts Martin M\"achler and I started work on mixed-effects models using S4 classes and methods
+      \begin{itemize}
+        \pause
+        \item Used sparse matrix methods
+        \item Initially the linear algebra was part of \textbf{lme4}, later split to the \textbf{Matrix} package
+        \item Dirk and Romain started developing \textbf{Rcpp}.  I merged \textbf{Rcpp} and \textbf{Eigen} to form \textbf{RcppEigen}
+      \end{itemize}
+      \pause
+    \end{itemize}
+  \end{frame}
+\end{document}
