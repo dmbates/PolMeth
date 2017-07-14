@@ -13,7 +13,7 @@
   \begin{frame}\frametitle{For the impatient}
     \begin{itemize}
       \pause
-      \item Much of this talk will be about the
+      \item The final part of this talk will be about the
       \href{https://julialang.org}{Julia} programming language
       \pause
       \item For an overview of \href{https:julialang.org}{Julia} for econometrics,
@@ -247,6 +247,29 @@
     \end{itemize}
   \end{frame}
 
+  \begin{frame}\frametitle{The teens and enhancements like RStudio and Rcpp}
+  \begin{itemize}
+    \pause
+    \item RStudio - definitive IDE for R
+    \pause
+    \begin{itemize}
+      \item Introduced in 2011
+      \item Freely available for personal use - important for teaching
+      \item J.J. Allaire brought Hadley Wickham on as Chief Scientist.  More hires followed.
+      \item RStudio is now much more than an IDE - the most creative group in the R community
+      \item Fast moving group in contrast to more conservative R core
+    \end{itemize}
+    \item Rcpp - ``seamless'' integration of R and C++
+    \pause
+    \begin{itemize}
+      \item Integrate ease of use of R with speed of a compiled language relatively painlessly
+      \item But - C++
+      \item There is a fundamental mismatch in the languages (static vs dynamic)
+    \end{itemize}
+  \end{itemize}
+
+  \end{frame}
+
 \section{Hitting the wall with R}
 
   \begin{frame}\frametitle{My adventures fitting mixed-effects models - nlme}
@@ -274,11 +297,64 @@
       \item In the aughts Martin M\"achler and I started work on mixed-effects models using S4 classes and methods
       \begin{itemize}
         \pause
-        \item Used sparse matrix methods
+        \item Incorporated sparse matrix methods for which we needed to access more linear algebra software
         \item Initially the linear algebra was part of \textbf{lme4}, later split to the \textbf{Matrix} package
-        \item Dirk and Romain started developing \textbf{Rcpp}.  I merged \textbf{Rcpp} and \textbf{Eigen} to form \textbf{RcppEigen}
+        \item Later \textbf{Rcpp}'ized \textbf{Eigen} (C++ matrix package) as \textbf{RcppEigen}
+        \item Needed better optimization software for difficult case
+        \item Ended up using S3, S4, reference classes, $\dots$
+        \item In the teens, Ben Bolker became the primary maintainer.
+        \item Now about 6,000 lines of R code, 2700 lines of C/C++ code
+        \item Fits both linear mixed models and generalized linear mixed models
+        \item Faster and more reliable than \texttt{nlme} although coverage of two packages not identical
+        \item Can fit models with crossed random effects, such as for Subject/Item data
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{Why not stop at lme4?}
+    \begin{itemize}
+      \pause
+      \item Code is unwieldy and opaque - difficult to maintain and/or extend
+      \pause
+      \item Still problems with
+      \pause
+      \begin{itemize}
+        \item optimizers
+        \item linear algebra
+        \item using large objects in iterative algorithms
+        \item the static/dynamic barrier in general
       \end{itemize}
       \pause
+      \item Many of these issues are the result of S/R initial design decisions
+      \begin{itemize}
+        \item Lazy evaluation
+        \item Functional semantics
+      \end{itemize}
     \end{itemize}
+  \end{frame}
+
+  \section{Enter Julia}
+
+  \begin{frame}\frametitle{The Julia language}
+    \begin{itemize}
+      \pause
+      \item Julia was developed by very skilled programmers explicitly for quantitative work
+      \pause
+      \item First public release in 2011 so relatively immature.  Still working on important infrastructure (e.g. DataFrames)
+      \pause
+      \item Developers has extensive experience with many languages (Python, R, Matlab, ...), but wanted more
+      \item Functions/methods, classes (a.k.a, types) as in R but much more rigorous
+      \item Flexibility and speed can be achieved with Just-In-Time compilation (JIT)
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}\frametitle{MixedModels package}
+  \begin{itemize}
+    \item Similar in coverage to the lme4 package
+    \item About 2700 lines of Julia code
+    \item Algorithmic enhancements relative to lme4
+    \item Usually about 10x faster than lme4
+  \end{itemize}
+
   \end{frame}
 \end{document}
